@@ -144,12 +144,33 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
         activeColor: widget.colorator != null
             ? widget.colorator!(item.value) ?? widget.selectedColor
             : widget.selectedColor,
-        title: Text(
-          item.label,
-          style: item.selected
-              ? widget.selectedItemsTextStyle
-              : widget.itemsTextStyle,
+        title: ListTile(
+          contentPadding: EdgeInsets.zero,
+          minLeadingWidth: 5,
+          leading: CircleAvatar(
+            radius: 15,
+            child: FadeInImage.assetNetwork(
+                placeholder: 'assets/noimg.jpg', image: item.imgUrl!),
+          ),
+          title: Text(
+            item.label,
+            style: item.selected
+                ? widget.selectedItemsTextStyle
+                : widget.itemsTextStyle,
+          ),
+          subtitle: Text(
+            item.subTitle ?? '',
+            style: item.selected
+                ? widget.selectedItemsTextStyle
+                : widget.itemsTextStyle,
+          ),
         ),
+        // Text(
+        //   item.label,
+        //   style: item.selected
+        //       ? widget.selectedItemsTextStyle
+        //       : widget.itemsTextStyle,
+        // ),
         controlAffinity: ListTileControlAffinity.leading,
         onChanged: (checked) {
           setState(() {
