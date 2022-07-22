@@ -270,7 +270,7 @@ class __MultiSelectChipFieldViewState<V>
       _selectedValues.addAll(widget.initialValue!);
     }
     if (widget.scrollControl != null && widget.scroll)
-      WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToPosition());
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToPosition());
   }
 
   _scrollToPosition() {
@@ -379,7 +379,7 @@ class __MultiSelectChipFieldViewState<V>
                           MediaQuery.of(context).size.height * 0.08,
                       child: widget.scrollBar != null
                           ? Scrollbar(
-                              isAlwaysShown: widget.scrollBar!.isAlwaysShown,
+                              thumbVisibility: widget.scrollBar!.isAlwaysShown,
                               controller: _scrollController,
                               child: ListView.builder(
                                 controller: _scrollController,
@@ -480,28 +480,52 @@ class __MultiSelectChipFieldViewState<V>
                   )
                 : null
             : null,
-        label: Container(
-          width: widget.chipWidth,
-          child: Text(
-            item.label,
-            overflow: TextOverflow.ellipsis,
-            style: _selectedValues.contains(item.value)
-                ? TextStyle(
-                    color: widget.colorator != null &&
-                            widget.colorator!(item.value) != null
-                        ? widget.colorator!(item.value)!.withOpacity(1)
-                        : widget.selectedTextStyle != null
-                            ? widget.selectedTextStyle!.color
-                            : null)
-                : TextStyle(
-                    color: widget.textStyle != null
-                        ? widget.textStyle!.color ?? widget.chipColor
-                        : widget.chipColor,
-                    fontSize: widget.textStyle != null
-                        ? widget.textStyle!.fontSize
-                        : null,
-                  ),
-          ),
+        label: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: _selectedValues.contains(item.value)
+                        ? Colors.blue
+                        : Colors.grey),
+              ),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                minLeadingWidth: 5,
+                leading: CircleAvatar(
+                  radius: 15,
+                  child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/place_holder.jpg',
+                      image: item.imgUrl!),
+                ),
+                title: Text(item.label),
+                subtitle: Text(item.subTitle ?? ''),
+              ),
+            ),
+            Container(
+              width: widget.chipWidth,
+              child: Text(
+                item.label,
+                overflow: TextOverflow.ellipsis,
+                style: _selectedValues.contains(item.value)
+                    ? TextStyle(
+                        color: widget.colorator != null &&
+                                widget.colorator!(item.value) != null
+                            ? widget.colorator!(item.value)!.withOpacity(1)
+                            : widget.selectedTextStyle != null
+                                ? widget.selectedTextStyle!.color
+                                : null)
+                    : TextStyle(
+                        color: widget.textStyle != null
+                            ? widget.textStyle!.color ?? widget.chipColor
+                            : widget.chipColor,
+                        fontSize: widget.textStyle != null
+                            ? widget.textStyle!.fontSize
+                            : null,
+                      ),
+              ),
+            ),
+          ],
         ),
         selected: _selectedValues.contains(item.value),
         backgroundColor: widget.chipColor ?? Colors.white70,
