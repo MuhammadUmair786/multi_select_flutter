@@ -141,16 +141,36 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
       child: CheckboxListTile(
         checkColor: widget.checkColor,
         value: item.selected,
+        contentPadding: EdgeInsets.all(5),
         activeColor: widget.colorator != null
             ? widget.colorator!(item.value) ?? widget.selectedColor
             : widget.selectedColor,
         title: ListTile(
           contentPadding: EdgeInsets.zero,
           minLeadingWidth: 5,
-          leading: CircleAvatar(
-            radius: 15,
-            child: FadeInImage.assetNetwork(
-                placeholder: 'assets/noimg.jpg', image: item.imgUrl!),
+          leading: Container(
+            // padding: const EdgeInsets.only(top: 5),
+            height: 40,
+            width: 40,
+            child: ClipOval(
+              // radius: 15,
+              child: FadeInImage.assetNetwork(
+                placeholder:
+                    '/Please_ignore_it_is_error_in_multi_select_flutter',
+                placeholderErrorBuilder: (context, error, stackTrace) {
+                  return CircularProgressIndicator.adaptive(
+                    strokeWidth: 2,
+                  );
+                },
+                image: item.imgUrl!,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: Icon(Icons.image_not_supported_outlined));
+                },
+              ),
+            ),
           ),
           title: Text(
             item.label,
